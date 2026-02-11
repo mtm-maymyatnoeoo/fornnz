@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Decision Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+  #next-btn {
+    background-color: purple;
+    color: black;
+    padding: 10px;
+    border-radius: 6px;
+  }
+  .btn-selected {
+    background-color: pink;
+  }
+</style>
+</head>
+
+<body class="bg-light d-flex align-items-center" style="min-height:100vh;">
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6 col-lg-4">
+
+      <!-- Quiz Card -->
+      <div id="quiz-card" class="card shadow p-4">
+        <h6 id="progress" class="text-muted"></h6>
+        <h4 id="question" class="mb-3"></h4>
+        <div id="choices" class="d-grid gap-2"></div>
+        <button id="next-btn" class="btn btn-primary mt-3" disabled>
+          Next
+        </button>
+      </div>
+
+      <!-- Result Card -->
+      <div id="result-card" class="card shadow p-4 mt-3 d-none text-center">
+        <h3>အဖြေ:</h3>
+        <p id="result-text" class="fs-5"></p>
+        <button id="restart-btn" class="btn btn-success">
+          Restart
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   QUESTIONS
+========================= */
+const questions = [
+  {
+    question: "nnzက ellsaကိုစိတ်ဆိုးရင်ဘယ်လိုလုပ်မှာလဲ?",
+    choices: [
+      { text: "စိတ်ထဲမှာပဲထားမယ်,ကျော်သွားမယ်", value: "D" },
+      { text: "ဘာမှမပြောပဲအဆက်သွယ်မလုပ်ဘူး,,ပြီးမှပြန်ခေါ်မယ်", value: "B" },
+      { text: "စိတ်ဆိုးတာကိုမပြောဘဲ မခေါ်ဘူး", value: "D" },
+      { text: "စိတ်ဆိုးတယ်လို့ပြောပြီး မခေါ်ဘူး", value: "B" },
+      { text: "စိတ်ဆိုးတယ်လို့ပြောပြီး ခေါ်မယ်", value: "A" },
+      { text: "ဘာမှမပြောပဲလုံးဝမခေါ်တော့ဘူး", value: "D" },
+    ]
+  },
+  {
+    question: "သူများနဲ့ဖုန်းပြောနေတုန်းellsaရဲ့ဖုန်းဝင်လာရင်ဘယ်လိုလုပ်မှာလဲ?",
+    choices: [
+      { text: "သူများကိုချပြီးချက်ချင်းကိုင်မယ်", value: "A" },
+      { text: "သူများနဲ့ပြီးအောင်ပြောပြီးမှပြန်ခေါ်မယ်", value: "B" },
+      { text: "ပြန်မခေါ်ဖြစ်ဘူး", value: "D" },
+      { text: "ချက်ချင်းကိုင်ပြီး ပြီးမှပြန်ခေါ်မယ်လို့ပြောမယ်", value: "A" }
+    ]
+  }
+  ,
+  {
+    question: "အားလပ်ရက်အပြင်သွားရင်ဘယ်လိုနေရတာကြိုက်တာလဲ?",
+    choices: [
+      { text: "တနေကုန်လမ်းလျှောက်လည်နိုင်တယ်", value: "D" },
+      { text: "တနေကုန် တနေရာထဲမှာပတ်ပြီးမုန့်စားရတာကြိုက်တယ်", value: "D" },
+      { text: "တနေကုန် နေရာတွေအများကြီးပတ်သွားတာကြိုက်တယ်", value: "D" },
+      { text: "နေ့တဝက် တနေရာထဲမှာပတ်ပြီးမုန့်စားရတာကြိုက်တယ်", value: "A" },
+      { text: "နေ့တဝက် နေရာတွေအများကြီးပတ်သွားတာကြိုက်တယ်", value: "C" },
+      { text: "အပြင်ထွက်ရတာလုံးဝမကြိုက်ဘူး", value: "C" }
+    ]
+  }
+    ,
+  {
+    question: "သူငယ်ချင်းတွေနဲ့ချက်ချင်းအပြင်သွားရမယ် ellsaကိုပြောပြဖို့ellsaကဖုန်းမကိုင်ဘူးဆိုဘယ်လိုလုပ်မှာလဲ?",
+    choices: [
+      { text: "ellsaဖုန်းမကိုင်မချင်းခနခနဆက်မယ်", value: "A" },
+      { text: "SMS ကနေပြောမယ်", value: "A" },
+      { text: "Telegramကနေပြောမယ်", value: "B" },
+      { text: "Ellsaဖုန်းပြန်ဆက်မှပြောမယ်", value: "D" }
+    ]
+  }
+      ,
+  {
+    question: "သူများနဲ့စားရင် ဘယ်လိုစားတဲ့အကျင့်ရှိတာလဲ?",
+    choices: [
+      { text: "ကိုယ့်ဟာရောသူ့ဟာရောစားမယ်..တစ်ပန်းကန်အတူတူစားတတ်တယ်", value: "A" },
+      { text: "သက်သက်စီစားရတာကြိုက်တယ်", value: "D" },
+      { text: "ကိုယ့်ဟာရောသူ့ဟာရောအတူတူစားမယ်,", value: "B" },
+      { text: "တစ်ပန်းကန်အတူတူစားတတ်တယ်", value: "B" }
+    ]
+  }
+  ,
+  {
+    question: "Special Dateတွေဆိုဘယ်လိုလုပ်မှာလဲ (မွေ့းနေ့,VDay, AnniDay)?",
+    choices: [
+      { text: "သတိရရင်တစ်ခုခုပေးတယ်, ", value: "A" },
+      { text: "အမြဲတခုခုပေးတတ်တယ်", value: "A" },
+      { text: "ဘာမှလုံးဝမပေးတတ်ဘူး", value: "D" },
+      { text: "အရေးမကြီးလို့ကျော်သွားမယ်", value: "D" },
+      { text: "SMSတော့ပို့မယ်", value: "B" },
+      { text: "သာမန်နေ့လိုပဲ", value: "D" },
+      { text: "Supriseလုပ်ပေးမယ်", value: "D" },
+    ]
+  }
+    ,
+  {
+    question: "အပြင်သွားရင်ဘယ်လိုသွားတာလဲ?",
+    choices: [
+      { text: "YBSပဲအမြဲစီးတယ် ", value: "D" },
+      { text: "နေ့လည်ဆိုအမြဲYBS ညဆို taxi", value: "C" },
+      { text: "အမြဲTaxi", value: "B" },
+      { text: "ybsမရောက်မှtaxiစီးတယ်", value: "D" },
+      { text: "ybsမစီးချင်လဲtaxiစီးတယ်", value: "A" },
+
+    ]
+  }
+      ,
+  {
+    question: "ကြိုချိန်းထားပြီးမှထွက်ခါနီးမိုးအရမ်းရွာလာရင်ဘယ်လိုလုပ်မှာလဲ?",
+    choices: [
+      { text: "မလာတော့ဘူး", value: "D" },
+      { text: "ခနစောင့်ကြည့်ပြီးမိုးစဲမှလာမယ်,မစဲရင်မလာတော့ဘူး", value: "D" },
+      { text: "ခနစောင့်ကြည့်ပြီးမိုးစဲမှလာမယ်,မစဲရင်လဲလာမယ်", value: "B" },
+      { text: "ချက်ချင်းအချိန်ကိုနောက်ရွေ့မယ်", value: "D" },
+      { text: "စောင့်မကြည့်ဘဲ မိုးစဲလဲလာမယ်", value: "A" },
+    ]
+  }
+
+];
+
+/* =========================
+   STATE
+========================= */
+let currentIndex = 0;
+let answers = [];
+
+/* =========================
+   DOM ELEMENTS
+========================= */
+const questionEl = document.getElementById("question");
+const choicesEl = document.getElementById("choices");
+const nextBtn = document.getElementById("next-btn");
+const resultCard = document.getElementById("result-card");
+const quizCard = document.getElementById("quiz-card");
+const resultText = document.getElementById("result-text");
+const restartBtn = document.getElementById("restart-btn");
+const progressEl = document.getElementById("progress");
+
+/* =========================
+   LOAD QUESTION
+========================= */
+function loadQuestion() {
+  const current = questions[currentIndex];
+
+  questionEl.textContent = current.question;
+  progressEl.textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+  choicesEl.innerHTML = "";
+  nextBtn.disabled = true;
+
+  current.choices.forEach(choice => {
+    const button = document.createElement("button");
+    button.textContent = choice.text;
+    button.className = "btn btn-outline-secondary";
+
+    button.onclick = () => selectAnswer(choice.value, button);
+
+    choicesEl.appendChild(button);
+  });
+}
+
+/* =========================
+   SELECT ANSWER
+========================= */
+function selectAnswer(value, button) {
+
+  // prevent reselect
+  if (answers[currentIndex] !== undefined) return;
+
+  answers[currentIndex] = value;
+  nextBtn.disabled = false;
+
+  const buttons = choicesEl.querySelectorAll("button");
+
+  buttons.forEach(btn => {
+    btn.classList.remove("btn-outline-secondary");
+    btn.classList.remove("btn-primary");
+    btn.classList.add("btn-outline-secondary");
+    btn.disabled = true;
+  });
+
+  button.classList.remove("btn-outline-secondary");
+  button.classList.add("btn-primary");
+}
+
+/* =========================
+   NEXT BUTTON
+========================= */
+nextBtn.addEventListener("click", () => {
+  currentIndex++;
+
+  if (currentIndex < questions.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+});
+
+/* =========================
+   BUSINESS LOGIC
+========================= */
+function calculateResult() {
+  result = "success";
+
+  // Example Business Rules
+  answers.forEach(element => {
+      // If any answer is not A or B
+    if (element !== "A" && element !== "B") {
+      result = "fail";
+    }
+  });
+
+
+  return result === "success" ? "Passed!" : "Fail NNZ. You might want to work on relationship.";
+}
+
+/* =========================
+   SHOW RESULT
+========================= */
+function showResult() {
+  quizCard.classList.add("d-none");
+  resultCard.classList.remove("d-none");
+
+  const finalResult = calculateResult();
+  resultText.textContent = finalResult;
+}
+
+/* =========================
+   RESTART
+========================= */
+restartBtn.addEventListener("click", () => {
+  currentIndex = 0;
+  answers = [];
+  resultCard.classList.add("d-none");
+  quizCard.classList.remove("d-none");
+  loadQuestion();
+});
+
+/* =========================
+   INIT
+========================= */
+loadQuestion();
+
+</script>
+
+</body>
+</html>
