@@ -27,7 +27,7 @@
   <div class="row justify-content-center">
     <div class="col-12 col-md-6 col-lg-4">
       <h3 style="color: darkorchid;">NNZအတွက်evaluation</h3>
-      <h6 style="color:brown">အဖြေကတစ်ခါပဲနှိပ်လို့ရလို့ သေချာစဉ်းစားပြီးမှရွေးရန်</h6>
+      <h6 style="color:brown">အဖြေကတစ်ခါပဲနှိပ်လို့ရလို့ သေချာစဉ်းစားပြီးမှရွေးနော်</h6>
 
       <!-- Quiz Card -->
       <div id="quiz-card" class="card shadow p-4">
@@ -113,13 +113,12 @@ const questions = [
   {
     question: "Special Dateတွေဆိုဘယ်လိုလုပ်မှာလဲ (မွေ့းနေ့,VDay, AnniDay)?",
     choices: [
-      { text: "သတိရရင်တစ်ခုခုပေးတယ်, ", value: "A" },
-      { text: "အမြဲတခုခုပေးတတ်တယ်", value: "A" },
-      { text: "ဘာမှလုံးဝမပေးတတ်ဘူး", value: "D" },
+      { text: "မုန့်ပဲစားမယ်", value: "A" },
+      { text: "ဘာမှမလုပ်ဘူး", value: "D" },
       { text: "အရေးမကြီးလို့ကျော်သွားမယ်", value: "D" },
       { text: "SMSတော့ပို့မယ်", value: "B" },
       { text: "သာမန်နေ့လိုပဲ", value: "D" },
-      { text: "Supriseလုပ်ပေးမယ်", value: "D" },
+      { text: "Supriseလက်ဆောင်ပေးမယ်", value: "A" },
     ]
   }
     ,
@@ -145,7 +144,51 @@ const questions = [
       { text: "စောင့်မကြည့်ဘဲ မိုးစဲလဲလာမယ်", value: "A" },
     ]
   }
+      ,
+  {
+    question: "အပြင်သွားရင်ဘာစားမှာလဲ?",
+    choices: [
+      { text: "StreetFoods", value: "C" },
+      { text: "ဘာမှမစားဘူးအိမ်ပြန်ရောက်မှထမင်းစားမယ်,", value: "D" },
+      { text: "Both Snack and heavy meals", value: "D" },
+      { text: "Snacks, (အအေး,ကော်ဖီ, သရေစာ)", value: "A" },
+      { text: "HeavyFood(မာလာရှမ်းကော, ကြေးအိုး, etc)", value: "A" },
+    ]
+  }
+      ,
+  {
+    question: "တွဲရင်fbနဲ့ပက်သက်ပြီး?",
+    choices: [
+      { text: "နောက်၃လလောက်နေမှပုံတင်မယ်", value: "B" },
+      { text: "ချက်ချင်းလူပုံတင်မယ်", value: "D" },
+      { text: "အခုတော့ မျက်နှာမပါတဲ့လူပုံတင်မယ်", value: "A" },
+      { text: "ဘယ်တော့မှမတင်ဘူး", value: "D" },
+      { text: "နောက်၃လကြာမှ မျက်နှာမပါတဲ့လူပုံတင်မယ်", value: "A" },
+    ]
+  }
+        ,
+  {
+    question: "တွဲဖြစ်တဲ့အခါဘယ်လိုတွေ့မှာလဲ?",
+    choices: [
+      { text: "၁လတခါတွေ့မယ်", value: "C" },
+      { text: "၁လ၂ခါတွေ့မယ်", value: "A" },
+      { text: "၁ပတ်တခါတွေ့မယ်", value: "A" },
+      { text: "အဆင်ပြေတဲ့အပတ်မှတွေ့မယ်", value: "D" },
+      { text: "၁ပတ်၂ရက်တွေ့မယ်", value: "B" },
+    ]
+  }
+          ,
+  {
+    question: "Ellsaကတခါမှ RS နဲ့ပက်သက်ပြီး လုံးဝ Social Mediaမှာမတင်တတ်ဘူး,လက်ခံလား ?",
+    choices: [
+      { text: "လုံးဝသဘောမတူဘူး", value: "D" },
+      { text: "နားလည်ပါတယ်", value: "A" },
+      { text: "ရတော့ရပေမဲ့ မကျေနပ်ဘူး", value: "C" },
+      {text: "မရဘူး တင်ရမယ်ချက်ချင်း", value: "D" },
+      { text: "ရပါတယ်,၈လလောက်ကြာရင်တော့တင်ရမယ်", value: "B" },
 
+    ]
+  }
 ];
 
 /* =========================
