@@ -8,17 +8,36 @@
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<style>
-  #next-btn {
-    background-color: purple;
+  <style>
+    .btn-A {
+    font-weight: bold;
+    background-color: #28a745 !important;
+    color: white;
+  }
+
+  .btn-B {
+    font-weight: bold;
+
+    background-color: #ffc107 !important;
     color: black;
-    padding: 10px;
-    border-radius: 6px;
   }
-  .btn-selected {
-    background-color: pink;
+
+  .btn-D {
+    font-weight: bold;
+
+    background-color: #dc3545 !important;
+    color: white;
   }
-</style>
+    #next-btn {
+      background-color: purple;
+      color: black;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    .btn-selected {
+      background-color: pink;
+    }
+  </style>
 </head>
 
 <body class="bg-light d-flex align-items-center" style="min-height:100vh;">
@@ -43,7 +62,11 @@
       <div id="result-card" class="card shadow p-4 mt-3 d-none text-center">
         <h3>အဖြေ:</h3>
         <p id="result-text" class="fs-5"></p>
-        <button id="restart-btn" class="btn btn-success">
+        <button id="show-answers-btn" class="btn btn-info mt-2">
+          See Answers
+        </button>
+        <div id="a-answers" class="mt-3 text-start d-none"></div>
+        <button id="restart-btn" class="btn btn-success mt-3">
           Restart
         </button>
       </div>
@@ -57,6 +80,24 @@
    QUESTIONS
 ========================= */
 const questions = [
+  {
+    question: "Ellsaနဲ့ ညီညီဇော်ပထမဆုံးသိတဲ့ရက်?",
+    choices: [
+      { text: "၂၀၂၅/၁၂/၁၀", value: "D" },
+      { text: "၂၀၂၅/၁၁/၀၁", value: "D" },
+      { text: "၂၀၂၅/၁၂/၀၁", value: "A" },
+      { text: "၂၀၂၆/၀၁/၀၁", value: "C" },
+    ]
+  },
+  {
+    question: "nnzကတခြားမှာစိတ်ဆိုးစရာကိစ္စရှိတယ် , ellsaနဲ့စကားပြောတဲ့ခါဘယ်လိုဆက်ဆံမှာလဲ?",
+    choices: [
+      { text: "စိတ်ဆိုးစရာကိုပြောပြမယ် ပုံမှန်လိုဆက်ဆံမယ်,", value: "A" },
+      { text: "စိတ်ဆိုးစရာကိုပြောပြပြီး အာရုံနောက်ပြမယ်", value: "B" },
+      { text: "ဘာမှမပြောပြပဲ အာရုံနောက်ပြမယ်", value: "D" },
+      { text: "ဘာမှမပြောပြဘူး ပုံမှန်လိုဆက်ဆံမယ်", value: "C" },
+    ]
+  },
   {
     question: "nnzက ellsaကိုစိတ်ဆိုးရင်ဘယ်လိုလုပ်မှာလဲ?",
     choices: [
@@ -76,8 +117,7 @@ const questions = [
       { text: "ပြန်မခေါ်ဖြစ်ဘူး", value: "D" },
       { text: "ပြီးမှပြန်ခေါ်မယ်လို့ပြောမယ်လို့ပြောပြီးချမယ်", value: "A" }
     ]
-  }
-    ,
+  },
   {
     question: "သူငယ်ချင်းတွေနဲ့ချက်ချင်းအပြင်သွားရမယ် ellsaကိုပြောပြဖို့ellsaကဖုန်းမကိုင်ဘူးဆိုဘယ်လိုလုပ်မှာလဲ?",
     choices: [
@@ -88,8 +128,7 @@ const questions = [
       { text: "မဆက်တော့ဘူး Ellsaဖုန်းပြန်ဆက်မှပြောမယ်", value: "D" },
       { text: "မဆက်တော့ဘူး ပြန်ရောက်မှဆက်မယ်", value: "D" }
     ]
-  }
-  ,
+  },
   {
     question: "Special Dateတွေဆိုဘယ်လိုလုပ်မှာလဲ (မွေ့းနေ့,VDay, AnniDay)?",
     choices: [
@@ -99,8 +138,7 @@ const questions = [
       { text: "SMSတော့ပို့မယ်,ဘာမှမလုပ်ဘူး", value: "D" },
       { text: "အဲ့နေ့မှာ Supriseလက်ဆောင်ပို့ပေးမယ်", value: "A" },
     ]
-  }
-    ,
+  },
   {
     question: "Love languageက ဘာလဲ?",
     choices: [
@@ -119,10 +157,8 @@ const questions = [
       { text: "2,4", value: "D" },
       { text: "3,4", value: "A" },
       { text: "တခုမှမဟုတ်ဘူး", value: "D" },
-
     ]
-  }
-      ,
+  },
   {
     question: "ကြိုချိန်းထားပြီးမှထွက်ခါနီးမိုးအရမ်းရွာလာရင်ဘယ်လိုလုပ်မှာလဲ?",
     choices: [
@@ -132,21 +168,9 @@ const questions = [
       { text: "ချက်ချင်းအချိန်ကိုနောက်ရွေ့မယ်", value: "D" },
       { text: "စောင့်မကြည့်ဘဲ မိုးစဲလဲလာမယ်", value: "A" },
     ]
-  }
-      ,
+  },
   {
-    question: "အပြင်သွားရင်ဘာစားတတ်လဲ?",
-    choices: [
-      { text: "StreetFoods", value: "C" },
-      { text: "ဘာမှမစားဘူးအိမ်ပြန်ရောက်မှစားမယ်,", value: "D" },
-      { text: "Both Snack and heavy meals", value: "A" },
-      { text: "Snacks, (အအေး,ကော်ဖီ, သရေစာ)", value: "A" },
-      { text: "HeavyFood(မာလာရှမ်းကော, ကြေးအိုး, etc)", value: "A" },
-    ]
-  }
-      ,
-  {
-    question: "Socail MediaမှာEllsa နဲ့ပက်သက်ပြီး မျက်နှာမတင်ရဘူး, tag မတွဲရဘူး?",
+    question: "Socail MediaမှာEllsa နဲ့ပက်သက်ပြီး မျက်နှာပါတဲ့ပုံမတင်ရဘူး, tag မတွဲရဘူး?",
     choices: [
       { text: "သဘောတူသည်", value: "B" },
       { text: "သဘောမတူပါ", value: "D" },
@@ -154,30 +178,7 @@ const questions = [
       { text: "Ellsaကတင်လို့ရပြီပြောမှတင်ပါမယ်", value: "A" },
       { text: "တင်ချင်သလိုတင်မယ်", value: "D" },
     ]
-  }
-        ,
-  {
-    question: "တွဲဖြစ်တဲ့အခါ, Ellsa ကို.ဘယ်လောက်ကြာမှတွေ့မှာလဲ?",
-    choices: [
-      { text: "မတွေ့တော့ဘူး", value: "C" },
-      { text: "၁လတခါလောက်တွေ့မယ်", value: "C" },
-      { text: "၁လ၂ခါလောက်တွေ့မယ်", value: "A" },
-      { text: "၁ပတ်တခါလောက်တွေ့မယ်", value: "A" },
-      { text: "မပြောတတ်ဘူး အဆင်ပြေတဲ့ရက်မှတွေ့မယ်", value: "D" },
-      { text: "၁ပတ်၂ရက်တွေ့မယ်", value: "B" },
-    ]
-  }
-  ,
-  {
-    question: "Ellsaကတခါမှ RS နဲ့ပက်သက်ပြီး လုံးဝ Social Mediaမှာမတင်ခဲ့ဖူးဘူး, marryဖို့သေချာတဲ့အခါမှပဲတင်မယ်လို့တွေးထားတာ, လက်ခံလား ?",
-    choices: [
-      { text: "လုံးဝသဘောမတူဘူး", value: "D" },
-      { text: "နားလည်ပါတယ်", value: "A" },
-      { text: "ရတော့ရပေမဲ့ မကျေနပ်ဘူး ", value: "C" },
-
-    ]
   },
-
   {
     question: "တကယ်လို့Ellsaကအမှားလုပ်မိတဲ့အခါ, ညီညီဇော်ကစိတ်ဆိုးရင်ဘယ်လိုဆက်လုပ်မှာလဲ",
     choices: [
@@ -185,16 +186,34 @@ const questions = [
       { text: "Ellsaကမှားလို့ လုံးဝမတောင်းပန်နိုင်ဘူး", value: "D" },
       {text: "Ellsaကပြန်ချော့မှစိတ်ဆိုးပြေမယ်", value: "D" },
       {text:"စိတ်ထဲမှာထားပြီး ဘာမှမဖြစ်သလိုကျော်သွားမယ်", value: "D" },
-
     ]
-  }      ,
+  },
   {
     question: "Ellsaကိုမချစ်တော့တဲ့အခါ/ ကောင်မလေးအသစ်ချစ်မိတဲ့အခါဘယ်လိုလုပ်မှာလဲ?",
     choices: [
       { text: "Ellsaကိုအမှန်တိုင်းပြောမယ်", value: "A" },
-      { text: "Ellsaကိုဘာမှမပြောဘဲ, သွေးအေးပြမယ်", value: "D" },
+      { text: "Ellsaကိုဘာမှမပြောမယ်", value: "D" },
       { text: "Ellsaကိုအပြစ်ရှာမယ်", value: "D" },
       { text: "၂ယောက်လုံးတွဲမယ်", value: "D" },
+    ]
+  },
+  {
+    question: "ကောင်မလေးတစ်ယောက်က စကားတွေလာပြောနေရင်ဘယ်လိုလုပ်မှာလဲ",
+    choices: [
+      { text: "Ellsaကိုပြောပြပြီး သူ့ကိုပြန်မပြောဘူး", value: "A" },
+      { text: "Ellsaကိုမပြောပြဘဲဘူး သူ့ကိုလဲပြန်မပြောဘူး", value: "D" },
+      { text: "Ellsaမသိအောင်သူ့ကိုပြောမယ်", value: "D" },
+      { text: "Ellsaကိုပြောပြပြီး သူ့ကိုလဲပြန်ပြောမယ်", value: "D" },
+    ]
+  }
+  ,
+  {
+    question: "ညီညီဇော်က Ellsa ဆီကဘယ်လိုအရာကိုလိုချင်တာလဲ",
+    choices: [
+      { text: "Gifts", value: "D" },
+      { text: "Hugs", value: "A" },
+      { text: "Cheek Kiss", value: "B" },
+      { text: "ဘာမှမလိုချင်ဘူး", value: "D" },
     ]
   }
 ];
@@ -216,6 +235,8 @@ const quizCard = document.getElementById("quiz-card");
 const resultText = document.getElementById("result-text");
 const restartBtn = document.getElementById("restart-btn");
 const progressEl = document.getElementById("progress");
+const showAnswersBtn = document.getElementById("show-answers-btn");
+const aAnswersEl = document.getElementById("a-answers");
 
 /* =========================
    LOAD QUESTION
@@ -232,6 +253,7 @@ function loadQuestion() {
     const button = document.createElement("button");
     button.textContent = choice.text;
     button.className = "btn btn-outline-secondary";
+     button.style.color = "purple";   // text color
 
     button.onclick = () => selectAnswer(choice.value, button);
 
@@ -253,14 +275,20 @@ function selectAnswer(value, button) {
   const buttons = choicesEl.querySelectorAll("button");
 
   buttons.forEach(btn => {
-    btn.classList.remove("btn-outline-secondary");
-    btn.classList.remove("btn-primary");
-    btn.classList.add("btn-outline-secondary");
     btn.disabled = true;
   });
 
-  button.classList.remove("btn-outline-secondary");
-  button.classList.add("btn-primary");
+  // apply color depending on value
+  if (value === "A") {
+    button.classList.add("btn-A");
+  } 
+  else if (value === "B") {
+    button.classList.add("btn-B");
+  } 
+  else {
+    button.classList.add("btn-D");
+  }
+
 }
 
 /* =========================
@@ -280,16 +308,13 @@ nextBtn.addEventListener("click", () => {
    BUSINESS LOGIC
 ========================= */
 function calculateResult() {
-  result = "success";
+  let result = "success";
 
-  // Example Business Rules
   answers.forEach(element => {
-      // If any answer is not A or B
     if (element !== "A" && element !== "B") {
       result = "fail";
     }
   });
-
 
   return result === "success" ? "ကံကောင်းပြီးအောင်မြင်သွားပါတယ်" : "ဝမ်းနည်းပါတယ် မအောင်မြင်ပါဘူးညီညီဇော်";
 }
@@ -303,7 +328,33 @@ function showResult() {
 
   const finalResult = calculateResult();
   resultText.textContent = finalResult;
+
+  aAnswersEl.classList.add("d-none"); // hide answers initially
+  showAnswersBtn.disabled = false;     // enable button
 }
+
+/* =========================
+   SHOW "A" ANSWERS ON BUTTON CLICK
+========================= */
+showAnswersBtn.addEventListener("click", () => {
+  const aFacts = [];
+  answers.forEach((ans, index) => {
+    if (ans === "A") {
+      const questionText = questions[index].question;
+      const answerText = questions[index].choices.find(c => c.value === "A").text;
+      aFacts.push({ question: questionText, answer: answerText });
+    }
+  });
+
+  if(aFacts.length > 0){
+    // aAnswersEl.innerHTML = `<h5>"A" Choices You Selected:</h5>
+    //   <ul>
+    //     ${aFacts.map(f => `<li><strong>Q:</strong> ${f.question}<br><strong>A:</strong> ${f.answer}</li>`).join("")}
+    //   </ul>`;
+    // aAnswersEl.classList.remove("d-none");
+    // showAnswersBtn.disabled = true; // optional
+  }
+});
 
 /* =========================
    RESTART
